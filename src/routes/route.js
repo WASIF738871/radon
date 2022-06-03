@@ -41,8 +41,45 @@ router.get("/test-api-6" , function(req, res) {
     res.send({a:56, b: 45})
 })
 
-router.post("/test-post", function(req, res) {
-    res.send([ 23, 45 , 6])
+
+
+let players =
+   [
+       {
+           "name": "manish",
+           "dob": "1/1/1995",
+           "gender": "male",
+           "city": "jalandhar",
+           "sports": [
+               "swimming"
+           ]
+       },
+       {
+           "name": "gopal",
+           "dob": "1/09/1995",
+           "gender": "male",
+           "city": "delhi",
+           "sports": [
+               "soccer"
+           ]
+       },
+       {
+           "name": "lokesh",
+           "dob": "1/1/1990",
+           "gender": "male",
+           "city": "mumbai",
+           "sports": [
+               "soccer"
+           ]
+       },
+   ]
+
+
+router.post("/players-post", function(req, res) {
+    const d = req.body
+    players.push(d)
+    
+    res.send({data:players})
 })
 
 
