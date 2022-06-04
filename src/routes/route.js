@@ -1,4 +1,5 @@
 const express = require('express');
+const nodemon = require('nodemon');
 const router = express.Router();
 
 router.get('/students/:name', function(req, res) {
@@ -41,63 +42,86 @@ router.get("/test-api-6" , function(req, res) {
     res.send({a:56, b: 45})
 })
 
+router.get("/test-api-6" , function(req, res) {
+    res.send({a:56, b: 45})
+})
 
 
-let players =
-   [
-       {
-           "name": "manish",
-           "dob": "1/1/1995",
-           "gender": "male",
-           "city": "jalandhar",
-           "sports": [
-               "swimming"
-           ]
-       },
-       {
-           "name": "gopal",
-           "dob": "1/09/1995",
-           "gender": "male",
-           "city": "delhi",
-           "sports": [
-               "soccer"
-           ]
-       },
-       {
-           "name": "lokesh",
-           "dob": "1/1/1990",
-           "gender": "male",
-           "city": "mumbai",
-           "sports": [
-               "soccer"
-           ]
-       },
-   ]
 
+const moviesList = ['Rang de basanti','Lhe shining','Lord of the rings','Batman begins']
 
-router.post("/players-post", function(req, res) {
-    const d = req.body
-    players.push(d)
+router.post("/movies", function(req, res) {
     
-    res.send({data:players})
+    console.log(moviesList);
+    res.send({data:moviesList})
 })
 
 
-router.post("/test-post-2", function(req, res) {
-    res.send(  { msg: "hi" , status: true }  )
+router.get("/movies/:indexNumber", function(req, res) {
+    
+const moviesList = ['Rang de basanti','Lhe shining','Lord of the rings','Batman begins']
+
+    if ((moviesList[req.params.indexNumber] > moviesList.length)||1){
+        console.log("this is not valid index")
+    }
+    const movieName = moviesList[req.params.indexNumber]
+    res.send(  { movie:movieName , status: true } )
 })
 
-router.post("/test-post-3", function(req, res) {
-    // let id = req.body.user
-    // let pwd= req.body.password
 
-    // console.log( id , pwd)
 
-    console.log( req.body )
 
-    res.send(  { msg: "hi" , status: true }  )
+
+router.get("/films", function(req, res) {
+    const films=[{
+        "id":1,
+        "name":"the shining"
+    },
+    {
+     "id":2,
+     "name":"incendies"
+    },
+    {
+     "id":3,
+     "name":"rang de basanti"
+    },
+    {
+     "id":4,
+     "name":"finding nemo"
+    }]
+    res.send(  { data: films , status: true }  )
 })
 
+
+router.get("/films/:filmId" , function(req, res) {
+
+    const films=[{
+        "id":1,
+        "name":"the shining"
+    },
+    {
+     "id":2,
+     "name":"incendies"
+    },
+    {
+     "id":3,
+     "name":"rang de basanti"
+    },
+    {
+     "id":4,
+     "name":"finding nemo"
+    }]
+
+    const id = req.query.filmId
+    const parsed = JSON.parse(films)
+    const filmName = parsed[id].name
+  
+    res.send({data:filmName, status:true})
+})
+
+router.get("/test-api-6" , function(req, res) {
+    res.send({a:56, b: 45})
+})
 
 
 router.post("/test-post-4", function(req, res) {
