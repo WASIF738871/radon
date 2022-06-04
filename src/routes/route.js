@@ -1,4 +1,5 @@
 const express = require('express');
+const nodemon = require('nodemon');
 const router = express.Router();
 
 router.get('/students/:name', function(req, res) {
@@ -75,11 +76,21 @@ let players =
    ]
 
 
-router.post("/players-post", function(req, res) {
-    const d = req.body
-    players.push(d)
+router.post("/players", function(req, res) {
+    const newPlayer = req.body
     
-    res.send({data:players})
+    for (let i = 0; i < players.length; i++) {
+        if (players[i].name == newPlayer["name"]){
+          console.log("player exists");
+          break;
+        }
+        if (players[i].name !== newPlayer["name"]){
+            console.log("player is added");
+            players.push(newPlayer)
+          }
+    }
+    
+    res.send({data:players,status:true})
 })
 
 
