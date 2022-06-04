@@ -58,13 +58,17 @@ router.post("/movies", function(req, res) {
 
 
 router.get("/movies/:indexNumber", function(req, res) {
+
+    
     
 const moviesList = ['Rang de basanti','Lhe shining','Lord of the rings','Batman begins']
 
-    if ((moviesList[req.params.indexNumber] > moviesList.length)||1){
-        console.log("this is not valid index")
+    if ((req.params.indexNumber < moviesList.length)){
+        var movieName = moviesList[req.params.indexNumber]
+    }else{
+        movieName = "his not a part of movie list"
     }
-    const movieName = moviesList[req.params.indexNumber]
+    
     res.send(  { movie:movieName , status: true } )
 })
 
@@ -111,11 +115,18 @@ router.get("/films/:filmId" , function(req, res) {
      "id":4,
      "name":"finding nemo"
     }]
-
-    const id = req.query.filmId
-    const parsed = JSON.parse(films)
-    const filmName = parsed[id].name
-  
+    let ids = req.params.filmId
+    if(req.params.filmId <= films.length){
+        for (let i = 0; i < films.length; i++) {
+        
+            if (req.params.filmId == films[i].id){
+                var filmName = films[i]
+            }
+    }
+         
+     }else{
+        var filmName = "id is not valid"
+    }
     res.send({data:filmName, status:true})
 })
 
