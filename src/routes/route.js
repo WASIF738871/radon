@@ -48,9 +48,9 @@ router.get("/test-api-6" , function(req, res) {
 
 
 
-const moviesList = ['Rang de basanti','Lhe shining','Lord of the rings','Batman begins']
+const moviesList = ['Rang de basanti','Tgit addcgit addhe shining','Lord of the rings','Batman begins']
 
-router.post("/movies", function(req, res) {
+router.get("/movies", function(req, res) {
     
     console.log(moviesList);
     res.send({data:moviesList})
@@ -58,15 +58,12 @@ router.post("/movies", function(req, res) {
 
 
 router.get("/movies/:indexNumber", function(req, res) {
-
-    
-    
-const moviesList = ['Rang de basanti','Lhe shining','Lord of the rings','Batman begins']
+const moviesList = ['Rang de basanti','The shining','Lord of the rings','Batman begins']
 
     if ((req.params.indexNumber < moviesList.length)){
         var movieName = moviesList[req.params.indexNumber]
     }else{
-        movieName = "his not a part of movie list"
+        movieName = " it is not a part of movie list"
     }
     
     res.send(  { movie:movieName , status: true } )
