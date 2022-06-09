@@ -66,27 +66,31 @@ const createBooks= async function (req, res) {
 }
 
 const chetanBhagat= async function (req, res) {
-    let findId= await authorsModel.find({author_name:"Chetan Bhagat"}).select({author_id:1})
-    let bookList= await booksModel.find({author_id:findId[0].author_id})
+    let findId= await authorsModel.findOne({author_name:"Chetan Bhagat"})
+    let bookList= await booksModel.find({author_id:findId.author_id})
     res.send({msg: bookList})
 }
 
 const updatePrice= async function (req, res) {
     let bookup= await booksModel.findOneAndUpdate({bookName:"Two states"},{$set:{price:100}},{new:true})
-    let authName = await authorsModel.find(bookup[author_id]).select({author_name:1})
+    let authName = await authorsModel.find({author_id:bookup.author_id}).select({author_name:1, _id:0})
     let prices = bookup.price
     res.send({msg:authName,prices})
 }
 
 const bookNew = async function(req, res){
-    let bookRange = await BookModel.find({price:{$lte:50, $gte:100}}).select({ author_id :1})
-    let arr = []
-    for (let i=0; i<bookRange.length ; i++){
-        let authorName = await AuthorModel.findOne({author_id: bookRange[i].author_id}).select({author_name:1, author_id:1, _id:0})
-        arr.push(authorName)
+    let bookRange = await booksModel.find({price:{$gte:50, $lte:100}})
+    let arr=[]
+    for(let i=0;i<bookRange.length;i++){
+        let id=bookRange[i].author_id
+        let dataList = await authorsModel.findOne({author_id:id})
+        let authorname=dataList.author_name
+        let bookname=bookRange[i].bookName
+        let rate=bookRange[i].price
+        let obj={Name:authorname,Book:bookname,RS:rate}
+        arr.push(obj)
     }
-    res.send({msg:arr})
-    
+    return res.send({Data:arr}) 
 }
 
 
