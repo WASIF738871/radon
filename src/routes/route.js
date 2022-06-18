@@ -12,6 +12,10 @@ router.get("/test-me", function (req, res) {
 router.get("/cowin/states", CowinController.getStates)
 router.get("/cowin/districtsInState/:stateId", CowinController.getDistricts)
 router.get("/cowin/getByPin", CowinController.getByPin)
+router.get("/cowin/getSessionByDistrict", CowinController.getSessionAvailable)
+router.get("/getTempOfLondon", CowinController.londonTemp)
+router.get("/sortCitiesByTemp", CowinController.sortCitiesByTemp)
+router.get("/getMeme", CowinController.getMeme)
 
 router.post("/cowin/getOtp", CowinController.getOtp)
 
