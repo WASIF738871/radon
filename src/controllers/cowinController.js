@@ -12,7 +12,9 @@ let getStates = async function (req, res) {
         let result = await axios(options);
         console.log(result)
         let data = result.data
+        // let data = result.data.states
         res.status(200).send({ msg: data, status: true })
+        // res.status(200).send(data)
     }
     catch (err) {
         console.log(err)
@@ -31,7 +33,9 @@ let getDistricts = async function (req, res) {
         let result = await axios(options);
         console.log(result)
         let data = result.data
+        // let data = result.data.districts
         res.status(200).send({ msg: data, status: true })
+        // res.status(200).send(data )
     }
     catch (err) {
         console.log(err)
@@ -89,6 +93,7 @@ const getSessionAvailable = async function (req, res) {
         }
         let result = await axios(options)
         res.status(200).send({ msg: result.data, status: true })
+        // res.status(200).send(result.data)
     }
     catch (err) {
         res.status(500).send({ msg: "error", error: err.message })
@@ -103,7 +108,8 @@ const londonTemp = async function (req, res) {
             url: `http://api.openweathermap.org/data/2.5/weather?q=London&appid=34ca009cba4386f0f164e61f64ef3316`,
         }
         let result = await axios(options)
-        res.status(200).send({ msg: result.data.main.temp, status: true })
+        const londonTemprature = result.data.main.temp
+        res.status(200).send({ msg: londonTemprature, status: true })
     }
     catch (err) {
         res.status(500).send({ msg: "error", error: err.message })
@@ -125,7 +131,7 @@ const sortCitiesByTemp = async function (req, res) {
             sortedArrofObj.push(obj)
         }
         const sortedArray = sortedArrofObj.sort(function(a ,b){return a.temp-b.temp})
-        res.status(200).send(sortedArrofObj)
+        res.status(200).send(sortedArray)
     }
     catch (err) {
         res.status(500).send({ msg: "error", error: err.message })
