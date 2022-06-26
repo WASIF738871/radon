@@ -1,5 +1,6 @@
 const blogModel = require('../models/blogModel');
 const authorModel = require('../models/authorModel');
+const middleware = require('../middlewares/auth')
 
 //  API - 2 || TO CREATE BLOGS
 
@@ -133,7 +134,7 @@ const deleteBlogsByQuery = async function (req, res) {
 
         let deleteData = await blogModel.updateMany({
 
-            authorId: req.decodedToken.authorId,
+            authorId: authorToBeSignedIn,
             isDeleted: true, $or: [{ authorId: authorId },
             { isPublished: isPublished },
             { tags: tags },

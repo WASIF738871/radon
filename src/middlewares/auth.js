@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const blogModel = require('../models/blogModel')
 const authorController = require('../controllers/authorController')
+const urlValidator = require('url-validator')
 
 const authentication = async function (req, res, next) {
     try {
@@ -25,6 +26,7 @@ const authentication = async function (req, res, next) {
         }
 
         req["decodedToken"] = decodedToken
+        // req.decodedToken = decodedToken
 
         next()
 
@@ -37,6 +39,11 @@ const authentication = async function (req, res, next) {
 
 const authorization = async function (req, res, next) {
     try {
+        var url = urlValidator(req.url)
+        console.log(url)
+        if(!url){
+            return res.status(400).send({status:false, msg:"please enter the path"})
+        }
         let validAuthorId = req.decodedToken.authorId
         let id = req.params.blogId
 
@@ -63,27 +70,50 @@ const authorization = async function (req, res, next) {
 const authorizationForQuery = async function (req, res, next) {
 
     let data = req.query
-    let { authorId, category, tags, subcategory, isPublished } = req.query
-    // let validAuthorId = req.decodedToken.authorId
+    console.log(data)
+    // let { authorId, category, tags, subcategory, isPublished } = req.query
+
+    let validAuthor = req.decodedToken.authorId
+    console.log(validAuthor)
 
     if (Object.keys(data).length == 0) {
         return res.status(400).send({ status: false, msg: "please enter a query" })
     }
 
-    let findAuthorId = await blogModel.find({
-        authorId: req.decodedToken.authorId, $or: [
-            { authorId: authorId },
-            { tags: tags },
-            { subcategory: subcategory },
-            { category: category },
-            { isPublished: isPublished }]
-    }).select({ _id: 0, authorId: 1 })
+    // let findAuthorId = await blogModel.find({
+    //     authorId: req.decodedToken.authorId, $or: [
+    //         { authorId: authorId },
+    //         { tags: tags },
+    //         { subcategory: subcategory },
+    //         { category: category },
+    //         { isPublished: isPublished }]
+    // }).select({ _id: 0, authorId: 1 })
 
-    if (!findAuthorId[0]) {
-        return res.status(404).send({ status: false, msg: "document doesn't exist / you are not authorized" })
+    // if (!findAuthorId[0]) {
+    //     return res.status(404).send({ status: false, msg: "document doesn't exist / you are not authorized" })
+    // }
+    let loggedInAuthor = await blogModel.find(data)
+    console.log(loggedInAuthor)
+    let len = loggedInAuthor.length
+    console.log(len)
+    for (let i = 0; i < len; i++) {
+        // if (loggedInAuthor[i].authorId!= validAuthor||undefined){
+        //     return res.status(403).send({status: false, msg:"you are not authorized"})
+        // }else{
+        //     next()
+        // }
+        if (loggedInAuthor[i].authorId == validAuthor || undefined) {
+            // console.log(loggedInAuthor[i].authorId)
+            authorToBeSignedIn = loggedInAuthor[i].authorId
+            if (authorToBeSignedIn == validAuthor){
+                console.log(authorToBeSignedIn)
+                next()
+            }
+            
+        } else {
+            return res.status(403).send({ status: false, msg: "you are not authorized" })
+        }
     }
-
-    next()
 }
 
 
